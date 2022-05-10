@@ -2,24 +2,65 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    onCloseFunction(selectedDates[0]);
   },
 };
 
-flatpickr('input#datetime-picker', options);
+const refs = {
+  btnStartTime: document.querySelector('[data-start]'),
+  days: document.querySelector('[data-days]'),
+  hours: document.querySelector('[data-hours]'),
+  minutes: document.querySelector('[data-minutes]'),
+  seconds: document.querySelector('[data-seconds]'),
+  inputEl: document.querySelector('#datetime-picker'),
+};
 
-const btnStartTime = document.querySelector('[data-start]');
+const fl = flatpickr(refs.inputEl, options);
+
+let selectedDate = Date.now();
+let isActive = true;
+
+refs.btnStartTime.disabled = isActive;
+refs.btnStartTime.addEventListener('click', onStartClick);
+
+function onCloseFunction(date) {
+  if (Date.now() > date) {
+    Notiflix.Notify.failure('Please choose a date in the future');
+  } else {
+    refs.btnStartTime.disabled = !isActive;
+    selectedDate = date;
+  }
+}
+
+function onStartClick() {
+  refs.btnStartTime.disabled = isActive;
+  fl.destroy();
+  refs.inputEl.disabled = isActive;
+  calculationStart();
+}
+
+function calculationStart() {
+  setInterval(() => {
+    const time = convertMs(selectedDate - Date.now());
+    addZero(time);
+  }, 1000);
+}
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
+}
+
+function addZero({ days, hours, minutes, seconds }) {
+  refs.days.textContent = addLeadingZero(days);
+  refs.hours.textContent = addLeadingZero(hours);
+  refs.minutes.textContent = addLeadingZero(minutes);
+  refs.seconds.textContent = addLeadingZero(seconds);
 }
 
 function convertMs(ms) {

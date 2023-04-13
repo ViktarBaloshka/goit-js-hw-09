@@ -22,6 +22,7 @@ const refs = {
 
 let isActive = true;
 let selectedDate = Date.now();
+const time = convertMs(selectedDate - Date.now());
 const fltpckr = flatpickr(refs.timeSet, options);
 
 refs.btnStart.addEventListener('click', onClickStart);
@@ -32,15 +33,14 @@ function onCloseFunction(date) {
   } else {
     refs.btnStart.disabled = !isActive;
     selectedDate = date;
+    refs.timeSet.disabled = !isActive;
   }
 }
 
 function onClickStart() {
   refs.btnStart.disabled = isActive;
   fltpckr.destroy();
-  refs.timeSet = isActive;
   setInterval(() => {
-    const time = convertMs(selectedDate - Date.now());
     updateTime(time);
   }, 1000);
 }

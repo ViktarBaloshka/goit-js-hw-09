@@ -16,3 +16,47 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.container {
+  width: 90vw;
+  margin: 0 auto;
+}
+
+.section__timer {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+.input__thumb,
+.output__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.output__thumb {
+  justify-content: space-evenly;
+  text-align: center;
+}
+.label {
+  display: flex;
+  text-align: center;
+  font-size: 50px;
+}
+
+.value {
+  font-size: 50px;
+}
+input[type='text'] {
+  width: 307px;
+  height: 60px;
+  margin-right: 20px;
+  font-size: 30px;
+}
+
+button[type='button'] {
+  width: 200px;
+  height: 60px;
+  font-size: 30px;
+  cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
 
 const options = {
   enableTime: true,
@@ -22,14 +23,19 @@ const refs = {
 
 let isActive = true;
 let selectedDate = Date.now();
-const time = convertMs(selectedDate - Date.now());
 const fltpckr = flatpickr(refs.timeSet, options);
 
 refs.btnStart.addEventListener('click', onClickStart);
 
 function onCloseFunction(date) {
   if (Date.now() > date) {
-    window.alert('Please choose a date in the future');
+    Notiflix.Notify.failure('Please choose a date in the future', {
+      timeout: 2000,
+      fontSize: '18px',
+      width: '380px',
+    });
+    // window.alert('Please choose a date in the future');
+    refs.btnStart.disabled = isActive;
   } else {
     refs.btnStart.disabled = !isActive;
     selectedDate = date;
@@ -40,12 +46,20 @@ function onCloseFunction(date) {
 function onClickStart() {
   refs.btnStart.disabled = isActive;
   fltpckr.destroy();
+  refs.timeSet.disabled = isActive;
   setInterval(() => {
-    updateTime(time);
+    updateTime(convertMs(selectedDate - Date.now()));
   }, 1000);
 }
 
 function updateTime({ days, hours, minutes, seconds }) {
+  // Обработка отрицательного значения, например, установка значений в 0
+  if (days < 0 || hours < 0 || minutes < 0 || seconds < 0) {
+    days = 0;
+    hours = 0;
+    minutes = 0;
+    seconds = 0;
+  }
   refs.inputDay.textContent = addLeadingZero(days);
   refs.inputHours.textContent = addLeadingZero(hours);
   refs.inputMinutes.textContent = addLeadingZero(minutes);

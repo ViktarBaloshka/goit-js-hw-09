@@ -14,7 +14,7 @@ const refs = {
   form: document.querySelector('form'),
 };
 
-refs.form = addEventListener('click', onFormSubmit);
+refs.form = addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(evt) {
   evt.preventDefault();
